@@ -23,12 +23,8 @@ module.exports = {
 
     new WasmPackPlugin({
       crateDirectory: __dirname,
-      withTypeScript: true // this is new
     }),
   ],
-  resolve: {
-    extensions: [".ts", ".tsx", ".js", ".wasm"]
-  },
   module: {
     rules: [{
       test: /\.tsx?$/,

@@ -1,27 +1,33 @@
 use wasm_bindgen::prelude::*;
-use web_sys::console;
+use web_sys::Document;
+use web_sys::HtmlElement;
 
+#[wasm_bindgen]
+pub fn run() {
+    // get window/document/body
+    let window = web_sys::window().expect("Could not get window");
+    let document = window.document().expect("Could not get document");
+    let body = document.body().expect("Could not get body");
 
-// When the `wee_alloc` feature is enabled, this uses `wee_alloc` as the global
-// allocator.
-//
-// If you don't want to use `wee_alloc`, you can safely delete this.
-#[cfg(feature = "wee_alloc")]
-#[global_allocator]
-static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
+    mount_app(&document, &body);
+}
 
+fn mount_app(document: &Document, body: &HtmlElement) {
+    mount_title(&document, &body);
+}
 
-// This is like the `main` function, except for JavaScript.
-#[wasm_bindgen(start)]
-pub fn main_js() -> Result<(), JsValue> {
-    // This provides better error messages in debug mode.
-    // It's disabled in release mode so it doesn't bloat up the file size.
-    #[cfg(debug_assertions)]
-    console_error_panic_hook::set_once();
+// Create a title
+fn mount_title(document: &Document, body: &HtmlElement) {
+    // create title element
+    let title = document
+        .create_element("h1")
+        .expect("Could not create element");
+    let title_text = document.create_text_node("DOT");
+    title
+        .append_child(&title_text)
+        .expect("Could not append child to title");
 
-
-    // Your code goes here!
-    console::log_1(&JsValue::from_str("Hello world!"));
-
-    Ok(())
+    // append to body
+    body.append_child(&title)
+        .expect("Could not append title to body");
 }
